@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Genesis Gonzalez</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+nav {
+  position: relative;
+  padding: 18px 52px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-name {
+  font-size: 0.88rem; font-weight: 300;
+  text-decoration: none; color: var(--ink);
+}
+.nav-name:hover, .nav-name:focus, .nav-name:active { text-decoration: none; outline: none; }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { font-size: 0.88rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: opacity 0.18s; }
+.nav-links a:hover { opacity: 0.5; }
+.nav-links a.active { text-decoration: underline; text-underline-offset: 4px; }
+.nav-links a.dim { color: var(--mid); }
+
+/* Playground gradient */
+.nav-links a.pg span {
+  background: linear-gradient(90deg,#f472b6,#a855f7,#818cf8,#f472b6);
+  background-size: 250% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: pgshift 3.5s linear infinite;
+}
+.nav-links a.pg:hover { opacity: 1; }
+@keyframes pgshift { 0%{background-position:0% center} 100%{background-position:250% center} }
+
+/* Hamburger */
+.nav-burger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; outline: none;
+  padding: 6px; cursor: none; margin-left: auto;
+}
+.nav-burger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); border-radius: 2px;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.2s;
+}
+.nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; }
+.nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 720px) {
+  nav { padding: 16px 24px; flex-wrap: wrap; }
+  .nav-burger { display: flex; }
+  .nav-links {
+    display: block; width: 100%; max-height: 0;
+    overflow: hidden; opacity: 0;
+    transition: max-height 0.44s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+  }
+  .nav-links.open { max-height: 300px; opacity: 1; }
+  .nav-links li a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  .nav-links li:last-child a { border-bottom: none; }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #fff;
+  --off: #f5f5f3;
+  --ink: #111;
+  --mid: #767676;
+  --border: #e6e6e4;
+  --accent: var(--ink);
+  --accent-bg: #f2edfb;
+}
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  cursor: none;
+}
+.cursor {
+  width: 7px; height: 7px;
+  background: var(--ink);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  mix-blend-mode: difference;
+}
+
+/* NAV */
+
+
+/* HERO */
+.hero {
+  max-width: 1060px; margin: 0 auto;
+  padding: 52px 52px 24px;
+}
+.hero-text {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--ink);
+  max-width: 620px;
+}
+.hero-text em { font-style: italic; }
+
+/* WORK */
+.work { max-width: 1060px; margin: 0 auto; padding: 48px 52px 80px; }
+.sec-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 14px; border-bottom: 1px solid var(--border); margin-bottom: 28px;
+}
+.sec-label { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.13em; color: var(--mid); }
+
+/* MASONRY */
+.masonry { columns: 2; column-gap: 14px; }
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 24px;
+  cursor: none;
+  position: relative;
+  display: block;
+}
+.card-img {
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+.card-img.tall  { height: 360px; }
+.card-img.med   { height: 270px; }
+.card-img.short { height: 210px; }
+.card-bg {
+  width: 100%; height: 100%;
+  transition: transform 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.masonry-item:hover .card-bg { transform: scale(1.03); }
+
+.card-pill {
+  position: absolute;
+  bottom: 14px; left: 14px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(6px);
+  border-radius: 100px;
+  padding: 6px 14px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--ink);
+  display: flex; align-items: center; gap: 6px;
+  z-index: 2;
+}
+.card-pill .yr { color: var(--mid); font-weight: 300; }
+
+.card-tagline {
+  font-size: 0.76rem;
+  color: var(--mid);
+  line-height: 1.5;
+  padding-top: 0;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.28s ease, opacity 0.28s ease, padding-top 0.28s ease;
+}
+.masonry-item:hover .card-tagline {
+  padding-top: 10px;
+  max-height: 60px;
+  opacity: 1;
+}
+
+.g1 { background: linear-gradient(140deg,#1e3058 0%,#4a70a8 100%); }
+.g2 { background: linear-gradient(140deg,#1a3d28 0%,#3a7a50 100%); }
+.g3 { background: linear-gradient(140deg,#4a1e10 0%,#8a3a20 100%); }
+.g4 { background: linear-gradient(140deg,#28186a 0%,#5a3a9a 100%); }
+
+/* Mentor U card pill glass effect */
+.mu-card .card-pill {
+  background: rgba(20,20,20,0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  box-shadow: none;
+}
+.mu-card .card-pill .yr { color: rgba(255,255,255,0.55); font-weight: 300; }
+.freetime { max-width: 1060px; margin: 0 auto; padding: 0 52px 92px; }
+.ft-head { margin-bottom: 20px; }
+.ft-headline {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+  font-weight: 400; line-height: 1.2; margin-bottom: 6px;
+}
+.ft-headline em { font-style: italic; }
+.ft-link {
+  font-size: 0.72rem; color: var(--mid); text-decoration: none;
+  border-bottom: 1px solid var(--border); padding-bottom: 1px;
+  transition: color 0.18s, border-color 0.18s;
+}
+.ft-link:hover { color: var(--ink); border-color: var(--ink); }
+.ft-row { display: flex; gap: 12px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; user-select: none; cursor: grab; }
+.ft-row.dragging { cursor: grabbing; }
+.ft-row::-webkit-scrollbar { display: none; }
+.ft-card {
+  flex-shrink: 0; width: 180px; height: 180px;
+  border-radius: 14px; overflow: hidden;
+  position: relative; cursor: default;
+}
+.ft-card-inner { width: 100%; height: 100%; display: flex; align-items: flex-end; padding: 13px; }
+.ft-name { font-size: 0.8rem; font-weight: 400; color: rgba(0,0,0,0.7); }
+.ft-cat { font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.09em; color: rgba(0,0,0,0.4); margin-bottom: 2px; }
+
+/* CONTACT */
+.contact {
+  max-width: 1060px; margin: 0 auto;
+  padding: 56px 52px 44px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: flex-end;
+}
+.contact-head {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 400; line-height: 1.1; margin-bottom: 14px;
+}
+.contact-head em { font-style: italic; }
+.contact-email {
+  font-size: 0.86rem; color: var(--ink); text-decoration: none;
+  border-bottom: 1px solid var(--ink); padding-bottom: 2px;
+  transition: color 0.18s, border-color 0.18s;
+}
+.contact-email:hover { color: #b83a28; border-color: #b83a28; }
+.contact-links { display: flex; flex-direction: column; align-items: flex-end; gap: 9px; }
+.contact-link { font-size: 0.74rem; color: var(--mid); text-decoration: none; transition: color 0.18s; }
+.contact-link:hover { color: var(--ink); }
+
+footer {
+  max-width: 1060px; margin: 0 auto;
+  padding: 16px 52px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between;
+}
+footer p { font-size: 0.65rem; color: var(--mid); }
+
+/* PAGE LOAD ANIMATION */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+nav   { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
+.hero { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
+
+/* Scroll-reveal for below-fold sections */
+.reveal-section {
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.55s cubic-bezier(0.16,1,0.3,1), transform 0.55s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal-section.visible { opacity: 1; transform: translateY(0); }
+
+/* POPUP */
+.overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,0.28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.28s ease, padding 0.5s cubic-bezier(0.16,1,0.3,1), background 0.4s ease;
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+.overlay.expanded {
+  padding: 0;
+  background: rgba(0,0,0,0);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.popup {
+  background: var(--white);
+  border-radius: 20px;
+  width: 100%; max-width: 680px;
+  max-height: 88vh;
+  overflow-y: auto; scrollbar-width: none;
+  transform: translateY(16px) scale(0.97);
+  opacity: 0;
+  transition:
+    transform 0.38s cubic-bezier(0.16,1,0.3,1),
+    opacity 0.28s ease,
+    max-width 0.52s cubic-bezier(0.16,1,0.3,1),
+    max-height 0.52s cubic-bezier(0.16,1,0.3,1),
+    border-radius 0.42s cubic-bezier(0.16,1,0.3,1);
+}
+.popup::-webkit-scrollbar { display: none; }
+.overlay.open .popup { transform: none; opacity: 1; }
+.overlay.expanded .popup {
+  max-width: 100vw;
+  max-height: 100vh;
+  border-radius: 0;
+}
+
+.popup-bar {
+  position: sticky; top: 0; z-index: 2;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.popup-breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.76rem; color: var(--mid);
+}
+.popup-breadcrumb .crumb-active { color: var(--ink); }
+.popup-breadcrumb .sep { font-size: 0.6rem; opacity: 0.4; }
+.popup-actions { display: flex; align-items: center; gap: 8px; }
+
+.popup-btn {
+  height: 28px; border-radius: 100px;
+  background: var(--off); border: none; cursor: none;
+  font-size: 0.72rem; font-family: 'DM Sans', sans-serif; font-weight: 300;
+  color: var(--ink); padding: 0 14px;
+  display: flex; align-items: center; gap: 5px;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+.popup-btn:hover { background: var(--border); }
+
+.popup-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--off); border: none; cursor: none;
+  font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s; flex-shrink: 0;
+}
+.popup-close:hover { background: var(--border); }
+
+.popup-body { padding: 36px 40px 80px; }
+.popup-name {
+  font-family: 'Instrument Serif', serif;
+  font-size: 2.2rem; font-weight: 400; margin-bottom: 24px; line-height: 1.1;
+}
+.popup-meta {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 16px;
+  padding: 18px 0;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.pm-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--mid); margin-bottom: 6px; }
+.pm-val { font-size: 0.84rem; line-height: 1.5; }
+.popup-visual {
+  border-radius: 14px; height: 260px;
+  margin-bottom: 32px;
+  transition: height 0.45s cubic-bezier(0.16,1,0.3,1);
+}
+.overlay.expanded .popup-visual { height: 380px; }
+.popup-desc { font-size: 0.88rem; line-height: 1.9; color: var(--mid); width: 100%; }
+
+/* ── CASE STUDY — single type scale ── */
+/* Sizes: label 0.6rem · body 0.84rem · heading 1.05rem · heading-lg 1.8rem
+   Weights: 400 body · 600 heading/strong
+   Colors: --ink headings/strong · --mid body text — NO purple on text */
+
+.cs-section {
+  margin-top: 64px;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.42s ease, transform 0.42s ease;
+}
+.cs-section.cs-visible { opacity: 1; transform: translateY(0); }
+
+/* Label — small caps above section */
+.cs-label, .cs-label-accent {
+  font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.15em;
+  color: var(--mid); margin-bottom: 8px; display: block; font-weight: 500;
+}
+
+/* Section heading */
+.cs-heading, .cs-heading-lg {
+  font-size: 1.05rem; font-weight: 600; color: var(--ink);
+  line-height: 1.25; margin-bottom: 12px; letter-spacing: -0.01em;
+}
+
+/* Body text */
+.cs-body {
+  font-size: 0.84rem; line-height: 1.75; color: var(--mid);
+}
+.cs-body + .cs-body { margin-top: 10px; }
+
+/* Image placeholder */
+.cs-img-placeholder {
+  width: 100%; border-radius: 8px; background: var(--off);
+  border: 1px solid var(--border); display: flex; align-items: center;
+  justify-content: center; margin: 16px 0;
+  font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,0,0,0.25);
+}
+
+/* Divider */
+.cs-divider { border: none; border-top: 1px solid var(--border); margin: 68px 0; }
+
+/* Stat row (used by wayfair/rolesync) */
+.cs-stats { display: flex; gap: 0; margin: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.cs-stat { flex: 1; padding: 16px 10px; text-align: center; border-right: 1px solid var(--border); }
+.cs-stat:last-child { border-right: none; }
+.cs-stat-num { font-size: 1.6rem; font-weight: 700; color: var(--ink); display: block; line-height: 1; margin-bottom: 4px; letter-spacing: -0.02em; }
+.cs-stat-label { font-size: 0.68rem; color: var(--mid); line-height: 1.4; }
+
+/* Quote (used by wayfair) */
+.cs-quote { border-left: 2px solid var(--border); padding: 4px 0 4px 14px; margin: 14px 0; font-size: 0.84rem; color: var(--mid); line-height: 1.7; font-style: italic; }
+.cs-quote cite { display: block; font-style: normal; font-size: 0.68rem; margin-top: 4px; opacity: 0.6; }
+
+/* List */
+.cs-list { list-style: none; margin: 14px 0; }
+.cs-list li { display: flex; gap: 10px; align-items: baseline; font-size: 0.84rem; color: var(--mid); line-height: 1.65; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.cs-list li:first-child { border-top: 1px solid var(--border); }
+.cs-list li::before { content: '—'; color: var(--border); flex-shrink: 0; font-size: 0.7rem; }
+.cs-list li strong { color: var(--ink); font-weight: 600; flex-shrink: 0; margin-right: 2px; }
+
+/* Steps */
+.cs-steps { list-style: none; margin: 16px 0; }
+.cs-steps li { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+.cs-steps li:last-child { border-bottom: none; }
+.cs-step-num { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; color: var(--ink); background: var(--off); border: 1px solid var(--border); border-radius: 4px; padding: 3px 7px; flex-shrink: 0; margin-top: 2px; }
+.cs-steps li p { font-size: 0.84rem; color: var(--mid); line-height: 1.65; margin: 0; }
+.cs-steps li strong { font-size: 0.84rem; color: var(--ink); font-weight: 600; display: block; margin-bottom: 2px; }
+
+/* Generic card grid */
+.cs-gap-grid, .cs-next-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 8px; margin: 14px 0; }
+.cs-gap-item, .cs-next-item { background: var(--off); border-radius: 8px; padding: 14px; border: 1px solid var(--border); }
+.cs-gap-item strong, .cs-next-item strong { font-size: 0.84rem; font-weight: 600; color: var(--ink); display: block; margin-bottom: 4px; }
+.cs-gap-item span, .cs-next-item span { font-size: 0.84rem; color: var(--mid); line-height: 1.55; }
+
+/* ── MENTOR U LAYOUTS ── */
+
+/* Alternating image + text row */
+.cs-alt-row { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; margin: 24px 0; }
+.cs-alt-row.cs-alt-flip { direction: rtl; }
+.cs-alt-row.cs-alt-flip > * { direction: ltr; }
+.cs-alt-img { background: var(--off); border-radius: 10px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,0,0,0.25); min-height: 210px; }
+.cs-alt-text h4 { font-size: 0.92rem; font-weight: 600; color: var(--ink); line-height: 1.3; margin-bottom: 8px; }
+.cs-alt-text p { font-size: 0.84rem; color: var(--mid); line-height: 1.75; }
+@media (max-width: 560px) { .cs-alt-row, .cs-alt-row.cs-alt-flip { grid-template-columns: 1fr; direction: ltr; } .cs-alt-img { min-height: 150px; } }
+
+/* Stat cards with dot icons */
+.cs-stat-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 18px 0; }
+.cs-stat-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px 14px; }
+.cs-stat-icons { display: flex; gap: 3px; margin-bottom: 10px; }
+.cs-stat-icons span { display: inline-block; width: 11px; height: 11px; background: var(--ink); border-radius: 50%; opacity: 0.2; }
+.cs-stat-icons span.active { opacity: 1; }
+.cs-stat-frac { font-size: 1.6rem; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 6px; letter-spacing: -0.03em; }
+.cs-stat-card p { font-size: 0.78rem; color: var(--mid); line-height: 1.5; }
+@media (max-width: 480px) { .cs-stat-cards { grid-template-columns: 1fr; } }
+
+/* Quote block */
+.cs-quote-block { background: #fff; border-radius: 10px; border: 1px solid var(--border); border-left: 3px solid var(--ink); padding: 18px 20px; margin: 8px 0; }
+.cs-quote-block blockquote { font-size: 0.84rem; font-style: italic; color: var(--ink); line-height: 1.7; margin-bottom: 6px; }
+.cs-quote-block cite { font-size: 0.72rem; color: var(--mid); font-style: normal; display: block; }
+
+/* Feature cards */
+.cs-feature-cards, .cs-gap-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 16px 0; }
+.cs-feature-card, .cs-gap-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+.cs-feature-card h5, .cs-gap-card h5 { font-size: 0.84rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.cs-feature-card p, .cs-gap-card p { font-size: 0.84rem; color: var(--mid); line-height: 1.6; }
+@media (max-width: 480px) { .cs-feature-cards, .cs-gap-cards { grid-template-columns: 1fr; } }
+
+/* Takeaway columns */
+.cs-takeaway-cols { display: flex; flex-direction: column; gap: 20px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+.cs-takeaway-col h5 { font-size: 0.6rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.13em; color: var(--ink); margin-bottom: 8px; }
+.cs-takeaway-col p { font-size: 0.84rem; color: var(--mid); line-height: 1.65; }
+@media (max-width: 560px) { .cs-takeaway-cols { grid-template-columns: 1fr; } }
+
+/* Expanded popup */
+.overlay.expanded .popup-body { max-width: 860px; margin: 0 auto; padding: 48px clamp(24px, 5vw, 80px) 80px; }
+.overlay.expanded .cs-img-placeholder { border-radius: 12px; }
+
+/* Side-by-side: text left, image right */
+.cs-side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; }
+.cs-side-text { display: flex; flex-direction: column; gap: 0; }
+.cs-side-img { }
+@media (max-width: 560px) { .cs-side-by-side { grid-template-columns: 1fr; } }
+
+/* Mobile carousel */
+.cs-mobile-carousel { margin: 20px 0 0; overflow: hidden; }
+.cs-mobile-scroll { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-bottom: 8px; cursor: grab; user-select: none; }
+.cs-mobile-scroll::-webkit-scrollbar { display: none; }
+.cs-mobile-scroll.dragging { cursor: grabbing; }
+.cs-mobile-screen { flex-shrink: 0; width: 160px; height: 280px; background: var(--off); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,0,0,0.25); }
+
+/* ── FUTURE FUNDS SPECIFIC ── */
+
+/* Research cards: label / italic quote / divider / body */
+.cs-research-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 24px 0; }
+.cs-research-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 20px 18px; display: flex; flex-direction: column; }
+.cs-rc-label { font-size: 0.58rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mid); margin-bottom: 12px; display: block; }
+.cs-rc-quote { font-size: 0.88rem; font-style: italic; color: var(--ink); line-height: 1.6; margin-bottom: 14px; }
+.cs-rc-divider { border: none; border-top: 1px solid var(--border); margin: 0 0 14px; }
+.cs-rc-body { font-size: 0.78rem; color: var(--mid); line-height: 1.6; margin: 0; }
+@media (max-width: 560px) { .cs-research-cards { grid-template-columns: 1fr; } }
+
+/* Logo/brand placeholder row */
+.cs-logo-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin: 20px 0; }
+.cs-logo-card { background: var(--off); border: 1px solid var(--border); border-radius: 10px; height: 120px; display: flex; align-items: center; justify-content: center; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,0,0,0.25); }
+@media (max-width: 480px) { .cs-logo-row { grid-template-columns: 1fr; } }
+
+/* Two-col takeaway: outcomes left, reflection right */
+.cs-two-col-takeaway { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+@media (max-width: 560px) { .cs-two-col-takeaway { grid-template-columns: 1fr; } }
+
+/* Checkmark list */
+.cs-check-list { list-style: none; margin: 12px 0 0; }
+.cs-check-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.84rem; color: var(--mid); line-height: 1.65; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.cs-check-list li:last-child { border-bottom: none; }
+.cs-check-list li::before { content: '✓'; color: var(--ink); flex-shrink: 0; font-size: 0.7rem; font-weight: 700; margin-top: 2px; }
+
+/* ── ROLESYNC SPECIFIC ── */
+
+/* Before/After 2-col */
+.cs-before-after { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 28px 0; }
+.cs-ba-card { border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+.cs-ba-header { padding: 10px 16px; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+.cs-ba-before .cs-ba-header { background: none; color: #dc2626; border-bottom: 1px solid var(--border); }
+.cs-ba-after  .cs-ba-header { background: none; color: #16a34a; border-bottom: 1px solid var(--border); }
+.cs-ba-body { background: #fff; padding: 20px; }
+.cs-ba-body p { font-size: 0.84rem; color: var(--mid); line-height: 1.75; margin-bottom: 16px; }
+.cs-ba-img { background: var(--off); border: 1px solid var(--border); border-radius: 6px; height: 120px; display: flex; align-items: center; justify-content: center; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,0,0,0.25); }
+@media (max-width: 520px) { .cs-before-after { grid-template-columns: 1fr; } }
+
+/* Circle numbered steps */
+/* Step accordion */
+.cs-accord { list-style: none; margin: 24px 0 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.cs-accord-item { border-bottom: 1px solid var(--border); }
+.cs-accord-item:last-child { border-bottom: none; }
+.cs-accord-trigger { width: 100%; padding: 16px 20px; display: flex; align-items: center; gap: 14px; }
+.cs-accord-num { width: 28px; height: 28px; min-width: 28px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 0.75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+.cs-accord-title { flex: 1; font-size: 0.88rem; font-weight: 600; color: var(--ink); }
+.cs-accord-body { display: block; padding: 0 20px 20px; }
+.cs-accord-body p { font-size: 0.84rem; color: var(--mid); line-height: 1.65; margin: 0 0 12px; }
+.cs-accord-body img, .cs-accord-body video { width: 100%; border-radius: 8px; display: block; }
+
+/* Screenshot grid: 2-col + optional full-width */
+.cs-screen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+.cs-screen-item { display: flex; flex-direction: column; gap: 8px; }
+.cs-screen-item.full { grid-column: 1 / -1; }
+.cs-screen-img { background: var(--off); border: 1px solid var(--border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(0,0,0,0.25); min-height: 180px; }
+.cs-screen-caption h5 { font-size: 0.84rem; font-weight: 600; color: var(--ink); margin-bottom: 2px; }
+.cs-screen-caption p { font-size: 0.78rem; color: var(--mid); line-height: 1.5; margin: 0; }
+@media (max-width: 520px) { .cs-screen-grid { grid-template-columns: 1fr; } .cs-screen-item.full { grid-column: auto; } }
+
+/* Dot timeline for iterations */
+.cs-timeline { list-style: none; margin: 20px 0; position: relative; padding-left: 24px; }
+.cs-timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 2px; background: var(--border); }
+.cs-timeline-item { position: relative; padding: 0 0 32px 18px; }
+.cs-timeline-item:last-child { padding-bottom: 0; }
+.cs-timeline-item::before { content: ''; position: absolute; left: -1px; top: 7px; width: 12px; height: 12px; border-radius: 50%; background: var(--ink); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--border); }
+.cs-timeline-item h5 { font-size: 0.84rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.cs-timeline-item p { font-size: 0.84rem; color: var(--mid); line-height: 1.65; margin: 0; }
+
+/* Outcome big stat cards */
+.cs-outcome-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin: 28px 0; }
+.cs-outcome-card { background: var(--off); border: 1px solid var(--border); border-radius: 10px; padding: 28px 14px; text-align: center; }
+.cs-outcome-num { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 8px; letter-spacing: -0.03em; display: block; }
+.cs-outcome-card p { font-size: 0.72rem; color: var(--mid); line-height: 1.4; margin: 0; }
+@media (max-width: 560px) { .cs-outcome-cards { grid-template-columns: repeat(2,1fr); } }
+
+/* Numbered agent list — title + description, divided by lines */
+.cs-agent-list { list-style: none; margin: 20px 0; }
+.cs-agent-list li { padding: 16px 0; border-bottom: 1px solid var(--border); }
+.cs-agent-list li:first-child { border-top: 1px solid var(--border); }
+.cs-agent-list li h5 { font-size: 0.84rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.cs-agent-list li p { font-size: 0.84rem; color: var(--mid); line-height: 1.65; margin: 0; }
+
+/* Left-border callout box */
+.cs-callout { border-left: 3px solid var(--ink); padding: 16px 20px; margin: 20px 0; background: var(--white); border-radius: 0 8px 8px 0; border-top: 1px solid var(--border); border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.cs-callout-title { font-size: 0.84rem; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+.cs-callout-group { margin-bottom: 14px; }
+.cs-callout-group:last-child { margin-bottom: 0; }
+.cs-callout-group p { font-size: 0.84rem; color: var(--mid); line-height: 1.65; margin-bottom: 6px; }
+.cs-code-block { background: var(--off); border-radius: 6px; padding: 10px 12px; margin-top: 6px; }
+.cs-code-block code { font-family: 'SFMono-Regular', 'Menlo', monospace; font-size: 0.76rem; color: var(--ink); line-height: 1.8; display: block; }
+
+/* Prompt sub-headings */
+.cs-sub-heading { font-size: 0.84rem; font-weight: 600; color: var(--ink); margin: 24px 0 12px; }
+
+/* 2-col card grid */
+.cs-2col-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+.cs-2col-card { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-size: 0.84rem; color: var(--mid); line-height: 1.6; }
+.cs-2col-card strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 520px) { .cs-2col-cards { grid-template-columns: 1fr; } }
+
+/* Arrow list */
+.cs-arrow-list { list-style: none; margin: 0; }
+.cs-arrow-list li { display: flex; gap: 10px; align-items: baseline; font-size: 0.84rem; color: var(--mid); line-height: 1.65; padding: 8px 0; border-bottom: 1px solid var(--border); }
+.cs-arrow-list li:last-child { border-bottom: none; }
+.cs-arrow-list li::before { content: '→'; color: var(--ink); flex-shrink: 0; font-size: 0.7rem; }
+.cs-arrow-list li strong { color: var(--ink); font-weight: 600; }
+
+/* Reflection blocks — left border with italic lead */
+.cs-reflection { border-left: 3px solid var(--border); padding: 4px 0 4px 16px; margin: 20px 0; }
+.cs-reflection-lead { font-size: 0.84rem; font-style: italic; color: var(--ink); font-weight: 500; margin-bottom: 8px; line-height: 1.6; }
+.cs-reflection p { font-size: 0.84rem; color: var(--mid); line-height: 1.75; margin: 0; }
+
+@media (max-width: 720px) {
+  
+  .hero, .work, .freetime, .contact, footer { padding-left: 24px; padding-right: 24px; }
+  .masonry { columns: 1; }
+  .contact { flex-direction: column; gap: 28px; align-items: flex-start; }
+  .popup-body { padding: 24px 20px 40px; }
+  .popup-meta { grid-template-columns: repeat(2,1fr); }
+}
+
+
+@media (max-width: 720px) {
+  
+  
+  
+  .nav-links.open { max-height: 300px; opacity: 1; }
+  .nav-links li a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.94rem; }
+  .nav-links li:last-child a { border-bottom: none; }
+  .card-tagline { padding-top: 10px; max-height: 60px; opacity: 1; }
+}
+
+
+@media (min-width: 721px) and (max-width: 1024px) {
+  .hero, .work, .freetime, .contact, footer { padding-left: 32px; padding-right: 32px; }
+  .masonry { columns: 2; column-gap: 12px; }
+  .card-img.tall  { height: 280px; }
+  .card-img.med   { height: 220px; }
+  .card-img.short { height: 180px; }
+  .card-tagline { padding-top: 10px; max-height: 60px; opacity: 1; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+
+<nav>
+  <a href="index.html" class="nav-name">Genesis Gonzalez</a>
+  <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#work" class="active">Work</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="https://docs.google.com/document/d/1zNy76x0Se27azE8jXadkKxv49OyBwPgmIT_o7kNyL_w/edit?usp=sharing" target="_blank" class="dim">Resume</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-text">
+    I'm Genesis, a UX researcher and designer who uncovers what users need and turns those insights into products that <em>feel just right.</em>
+  </p>
+</section>
+
+<!-- WORK -->
+<section class="work reveal-section" id="work">
+  <div class="sec-head">
+    <span class="sec-label">Selected Work</span>
+    <span class="sec-label">04 Projects</span>
+  </div>
+  <div class="masonry">
+
+    <div class="masonry-item" onclick="openPopup('mentor')">
+      <div class="card-img tall mu-card">
+        <div class="card-bg" style="background-image:url('cover-mentoru.png');background-size:cover;background-position:center top;"></div>
+        <div class="card-pill">Mentor U <span class="yr">· 2025</span></div>
+      </div>
+      <p class="card-tagline">Mentorship platform redesigned for first-generation students.</p>
+    </div>
+
+    <div class="masonry-item" onclick="openPopup('wayfair')">
+      <div class="card-img short mu-card">
+        <div class="card-bg" style="background-image:url('cover-wayfair.png');background-size:cover;background-position:center;"></div>
+        <div class="card-pill">Wayfair AI <span class="yr">· 2025</span></div>
+      </div>
+      <p class="card-tagline">AI market intelligence system for Wayfair vendor teams.</p>
+    </div>
+
+    <div class="masonry-item" onclick="openPopup('rolesync')">
+      <div class="card-img med mu-card">
+        <div class="card-bg" style="background-image:url('cover-rolesync.png');background-size:cover;background-position:center;"></div>
+        <div class="card-pill">RoleSync <span class="yr">· 2026</span></div>
+      </div>
+      <p class="card-tagline">Chrome extension that syncs job postings to Airtable in one click.</p>
+    </div>
+
+    <div class="masonry-item" onclick="openPopup('future')">
+      <div class="card-img tall mu-card">
+        <div class="card-bg" style="background-image:url('cover-futurefunds.png');background-size:cover;background-position:center;"></div>
+        <div class="card-pill">Future Funds <span class="yr">· 2025</span></div>
+      </div>
+      <p class="card-tagline">Financial landing page redesigned for clarity and accessibility.</p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section class="contact reveal-section" id="contact">
+  <div>
+    <h2 class="contact-head">Let's design<br>something <em>great.</em></h2>
+    <a href="#" class="contact-email" id="contactEmail"></a>
+  </div>
+  <div class="contact-links">
+    <a href="https://www.linkedin.com/in/genesismarie" class="contact-link" target="_blank">LinkedIn ↗</a>
+    <a href="https://docs.google.com/document/d/1zNy76x0Se27azE8jXadkKxv49OyBwPgmIT_o7kNyL_w/edit?usp=sharing" class="contact-link" target="_blank">Resume ↗</a>
+  </div>
+</section>
+
+<footer class="reveal-section">
+  <p>© 2026 Genesis Gonzalez</p>
+  <p>Designed & coded with ♥</p>
+</footer>
+
+<!-- POPUP -->
+<div class="overlay" id="overlay" onclick="outsideClose(event)">
+  <div class="popup" id="popup">
+    <div class="popup-bar">
+      <div class="popup-breadcrumb">
+        <span>Work</span>
+        <span class="sep">›</span>
+        <span class="crumb-active" id="pCrumb"></span>
+      </div>
+      <div class="popup-actions">
+        <button class="popup-btn" id="expandBtn" onclick="toggleExpand(event)">
+          <span id="expandIcon">↗</span>
+          <span id="expandLabel">Expand</span>
+        </button>
+        <button class="popup-close" onclick="closePopup()">✕</button>
+      </div>
+    </div>
+    <div class="popup-body">
+      <h2 class="popup-name" id="pName"></h2>
+      <div class="popup-meta" id="pMeta"></div>
+      <div class="popup-visual" id="pVisual"></div>
+      <div class="popup-desc" id="pDesc"></div>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const cur = document.getElementById('cur');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+});
+
+const data = {
+  mentor: {
+    name: 'Mentor U',
+    subtitle: 'Helping first-generation students build confidence and clarity as they move from education to employment.',
+    meta: [{l:'Timeline',v:'Jul – Sep 2025'},{l:'Role',v:'UX Designer (Solo)'},{l:'Scope',v:'UX Research · UI Design · Prototyping'}],
+    hero: 'images/hero-mentoru.png',
+    desc: `
+      <div class="cs-section">
+        <span class="cs-label">Problem</span>
+        <h3 class="cs-heading">When Support Falls Through The Cracks</h3>
+        <p class="cs-body">In my last year at Southern New Hampshire University's online program, I realized how easy it was for first-generation students to miss opportunities like internships, events, and career programs simply because they weren't visible or clearly communicated. Without clear guidance on what to focus on or when things were happening, many of us moved through college unsure how to turn our education into concrete opportunities.</p>
+      </div>
+
+      <div class="cs-section">
+        <span class="cs-label">Solution</span>
+        <h3 class="cs-heading-lg">Designing Mentor U</h3>
+        <p class="cs-body">Mentor U is a mobile platform that <strong style="color:var(--ink);">connects students with mentors who can share their experience, offer guidance, and keep them accountable</strong> as they move from education to employment. Through structured <strong style="color:var(--ink);">mentorship, milestone tracking, and curated recommendations</strong>, it helps students uncover internships, events, and programs they might have otherwise missed without trying to replace existing job boards or career tools.</p>
+        <div class="cs-alt-row" style="margin-top:32px;">
+          <img src="images/mentor-onboarding-screens.png" alt="Onboarding screens" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div class="cs-alt-text">
+            <span class="cs-label-accent">Onboarding</span>
+            <h4>The app asks simple questions to create a custom plan for every student based on their unique goals.</h4>
+          </div>
+        </div>
+        <div class="cs-alt-row cs-alt-flip">
+          <img src="images/mentor-matching-screens.png" alt="Mentor Matching screens" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div class="cs-alt-text">
+            <span class="cs-label-accent">Mentor Matching</span>
+            <h4>Students can quickly find and connect with mentors who have already walked in their shoes.</h4>
+          </div>
+        </div>
+        <div class="cs-alt-row">
+          <img src="images/mentor-milestone-screens.png" alt="Milestone Tracking screens" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div class="cs-alt-text">
+            <span class="cs-label-accent">Milestone Tracking</span>
+            <h4>Mentor U turns big career goals into small, easy steps to help students stay on track and celebrate their wins.</h4>
+          </div>
+        </div>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Research</span>
+        <h3 class="cs-heading-lg">Online Learning is Lonely</h3>
+        <p class="cs-body">After gathering feedback from SNHU students through a survey, all with different backgrounds, majors, and responsibilities, the pattern became impossible to ignore. While SNHU provides access to platforms like Career 360, Handshake, and LinkedIn, <strong style="color:var(--ink);">none of those tools gave them what they needed: support.</strong></p>
+        <div class="cs-stat-cards">
+          <div class="cs-stat-card">
+            <div class="cs-stat-icons"><span class="active"></span><span class="active"></span><span class="active"></span><span></span><span></span></div>
+            <div class="cs-stat-frac">3/5</div>
+            <p>Felt isolated or alone throughout their academic journey.</p>
+          </div>
+          <div class="cs-stat-card">
+            <div class="cs-stat-icons"><span class="active"></span><span class="active"></span><span class="active"></span><span class="active"></span><span></span></div>
+            <div class="cs-stat-frac">4/5</div>
+            <p>Lacked access to mentorship or career guidance.</p>
+          </div>
+          <div class="cs-stat-card">
+            <div class="cs-stat-icons"><span class="active"></span><span class="active"></span><span class="active"></span><span class="active"></span><span></span></div>
+            <div class="cs-stat-frac">4/5</div>
+            <p>Had difficulty navigating SNHU's support resources.</p>
+          </div>
+        </div>
+        <div class="cs-quote-block">
+          <blockquote>"Being an online student is isolating. We don't really talk to peers or professors besides in discussions."</blockquote>
+          <cite>— SNHU Student</cite>
+        </div>
+        <div class="cs-quote-block">
+          <blockquote>"I wish I had a mentor to help with my career path and goals."</blockquote>
+          <cite>— SNHU Student</cite>
+        </div>
+        <div class="cs-quote-block">
+          <blockquote>"I don't know where to start. There's not really anyone I can reach out to or talk to as a first gen."</blockquote>
+          <cite>— SNHU Student</cite>
+        </div>
+        <p class="cs-body" style="margin-top:16px;"><strong style="color:var(--ink);">These conversations proved consistent gaps in mentorship, networking, clarity, and follow-through.</strong> Students felt isolated and lost when redirected to platforms that gave them information, but not guidance. And that's what ultimately shaped the foundation for Mentor U.</p>
+      </div>
+
+      <div class="cs-section">
+        <h3 class="cs-heading-lg">Understanding the Gaps in Current Solutions</h3>
+        <p class="cs-body">I spent time auditing Career360, SNHU's main career portal. And to put it simply? <strong style="color:var(--ink);">It felt like walking into a library with no librarian.</strong> Lots of content, zero guidance. It was a content dump when what we needed was a coach.</p>
+        <div class="cs-gap-cards">
+          <div class="cs-gap-card"><h5>No Personalization</h5><p>No personalized pathways or progress tracking to help students understand where they are in their journey.</p></div>
+          <div class="cs-gap-card"><h5>No Connection</h5><p>No way to connect with mentors or peers inside the platform — just static content.</p></div>
+          <div class="cs-gap-card"><h5>No Accountability</h5><p>No goals, no accountability, no "what's next?" to keep students moving forward.</p></div>
+        </div>
+        <p class="cs-body"><strong style="color:var(--ink);">I also analyzed competitors like Handshake, LinkedIn, and Mentor Collective.</strong> They all had pieces of the puzzle, but none of them brought it together in a way that felt built for us. Non-traditional students need more than job boards and networking tips.</p>
+        <img src="images/mentor-competitor-chart.png" alt="Competitor analysis chart" style="width:100%;border-radius:10px;display:block;">
+      </div>
+
+      <div class="cs-section">
+        <h3 class="cs-heading">The User Behind the Data: Meet Camilla</h3>
+        <img src="images/mentor-persona.png" alt="User persona Camilla" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body">Before diving into solutions, I created a persona based on the students I spoke with. Camilla is a 28-year-old first-gen student, working full-time while finishing her degree online and often unsure if she's on the right track. She doesn't need another resource library — she needs clarity, connection, and someone to remind her she's not doing this alone.</p>
+      </div>
+
+      <div class="cs-section">
+        <h3 class="cs-heading-lg">What I Chose to Build</h3>
+        <p class="cs-body">After all that research, I had a better idea of what students, like Camilla, needed. Three features that would actually make a difference:</p>
+        <div class="cs-feature-cards">
+          <div class="cs-feature-card"><h5>Personalized Onboarding</h5><p>Asks the right questions to understand each student's journey.</p></div>
+          <div class="cs-feature-card"><h5>Milestone Tracking</h5><p>Keeps students on track as they move forward.</p></div>
+          <div class="cs-feature-card"><h5>Mentor Discovery</h5><p>Makes finding support feel accessible, not intimidating.</p></div>
+        </div>
+      </div>
+
+      <div class="cs-section">
+        <span class="cs-label">Ideation</span>
+        <h3 class="cs-heading">How Everything Comes Together</h3>
+        <p class="cs-body">With my features locked in, I mapped the user flows to show how students would move through the platform — from onboarding to finding mentors to completing milestones.</p>
+
+        <!-- User flow tabs -->
+        <div class="uf-tabs" style="margin-top:20px;">
+          <div style="display:flex;gap:0;border-bottom:1px solid var(--border);">
+            <button class="uft-btn active" onclick="ufSwitch(0,this)" style="padding:8px 20px;font-size:0.76rem;font-weight:500;background:none;border:none;border-bottom:2px solid var(--ink);color:var(--ink);cursor:none;margin-bottom:-1px;font-family:'DM Sans',sans-serif;">Onboarding</button>
+            <button class="uft-btn" onclick="ufSwitch(1,this)" style="padding:8px 20px;font-size:0.76rem;font-weight:300;background:none;border:none;border-bottom:2px solid transparent;color:var(--mid);cursor:none;margin-bottom:-1px;font-family:'DM Sans',sans-serif;">Mentor Booking</button>
+            <button class="uft-btn" onclick="ufSwitch(2,this)" style="padding:8px 20px;font-size:0.76rem;font-weight:300;background:none;border:none;border-bottom:2px solid transparent;color:var(--mid);cursor:none;margin-bottom:-1px;font-family:'DM Sans',sans-serif;">Milestones</button>
+          </div>
+          <div id="uf-panel-0" style="margin-top:16px;">
+            <img src="images/mentor-user-flow-onboarding.png" alt="Onboarding user flow" style="width:100%;border-radius:10px;display:block;">
+          </div>
+          <div id="uf-panel-1" style="display:none;margin-top:16px;">
+            <img src="images/mentor-user-flow-booking.png" alt="Mentor booking user flow" style="width:100%;border-radius:10px;display:block;">
+          </div>
+          <div id="uf-panel-2" style="display:none;margin-top:16px;">
+            <img src="images/mentor-user-flow-milestones.png" alt="Milestones user flow" style="width:100%;border-radius:10px;display:block;">
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-section">
+        
+        <h3 class="cs-heading">Sketching Possibilities</h3>
+        <p class="cs-body">With the flow nailed down, I moved into quick sketches to explore layout and structure. I kept it simple — just enough to map out onboarding, mentor discovery, and milestone tracking before committing to full wireframes.</p>
+        <img src="images/mentor-sketches.png" alt="Sketches" style="width:100%;border-radius:10px;display:block;">
+      </div>
+
+      <div class="cs-section">
+        
+        <h3 class="cs-heading">Key Design Explorations</h3>
+        <p class="cs-body">After getting the foundations down, I realized there were still moments that didn't feel right. So I kept refining — adjusting navigation, simplifying steps, and reworking the dashboard experience until everything felt natural and easy to use.</p>
+        <img src="images/mentor-nav-iterations.png" alt="Navigation iterations" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body" style="margin-top:6px;font-weight:600;color:var(--ink);">Navigation</p>
+        <img src="images/mentor-card-iterations.png" alt="Mentor card iterations" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body" style="margin-top:6px;font-weight:600;color:var(--ink);">Mentor Cards</p>
+        <img src="images/mentor-booking-iterations.png" alt="Mentor booking form iterations" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body" style="margin-top:6px;font-weight:600;color:var(--ink);">Mentor Booking Form</p>
+      </div>
+
+      <div class="cs-section">
+        <span class="cs-label">Design</span>
+        <h3 class="cs-heading">Design System</h3>
+        <img src="images/mentor-design-system.png" alt="Design system" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body">To maintain visual consistency and speed up the design process, I created a design system. It includes color styles, typography, spacing rules, and a library of reusable components tailored to Mentor U's user needs. This foundation helped me create high-fidelity screens that felt intuitive, accessible, and aligned with the tone of support and clarity Mentor U aimed to provide.</p>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Prototype</span>
+        <h3 class="cs-heading-lg">Bringing Mentor U to Life</h3>
+        <div class="cs-alt-row">
+          <img src="images/mentor-gif-onboarding.gif" alt="Onboarding flow" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div class="cs-alt-text">
+            <span class="cs-label-accent">Onboarding</span>
+            <h4>Getting to know every student so their experience feels personal</h4>
+            <p>I designed this simple intake to make sure the app feels relevant right away instead of offering a one-size-fits-all list.</p>
+          </div>
+        </div>
+        <div class="cs-alt-row cs-alt-flip">
+          <img src="images/mentor-gif-dashboard.gif" alt="Dashboard" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div class="cs-alt-text">
+            <span class="cs-label-accent">Dashboard</span>
+            <h4>A central starting point to keep students on the right track</h4>
+            <p>I designed the dashboard to encourage daily engagement by highlighting upcoming events and a peer feed so students feel connected to their community.</p>
+          </div>
+        </div>
+        <div class="cs-alt-row">
+          <img src="images/mentor-gif-booking.gif" alt="Mentor booking" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div class="cs-alt-text">
+            <span class="cs-label-accent">Mentor Booking</span>
+            <h4>Making it easy to find real human support without the stress</h4>
+            <p>I used tags to help students find relatable mentors faster and kept the booking form short to take the intimidation out of reaching out.</p>
+          </div>
+        </div>
+        <div class="cs-alt-row cs-alt-flip">
+          <img src="images/mentor-gif-milestones.gif" alt="Milestones" style="width:100%;height:100%;object-fit:cover;display:block;">
+          <div class="cs-alt-text">
+            <span class="cs-label-accent">Milestones</span>
+            <h4>Breaking long-term goals into achievable steps</h4>
+            <p>I designed a joint process where mentors and students build a plan together to stay accountable and keep moving forward.</p>
+          </div>
+        </div>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Takeaways</span>
+        <h3 class="cs-heading-lg">What I Learned</h3>
+        <p class="cs-body">This project taught me the value of designing from real student experiences rather than assumptions. Hearing from SNHU students revealed patterns I recognized from my own journey — the isolation, the missed opportunities, the feeling of being behind without knowing who to ask for help. These conversations confirmed that the gap between having resources and having guidance was something many of us experienced.</p>
+        <div class="cs-takeaway-cols">
+          <div class="cs-takeaway-col">
+            <h5>How I'd Measure Success</h5>
+            <p>I'd track whether mentor-student relationships last beyond 3 months, measure student confidence through before/after surveys, and monitor how many students match with a mentor within their first week.</p>
+          </div>
+          <div class="cs-takeaway-col">
+            <h5>What's Next</h5>
+            <p>Design the mentor experience (application, profile setup, tracking impact), conduct usability testing on the onboarding flow and mentor matching.</p>
+          </div>
+          <div class="cs-takeaway-col">
+            <h5>Key Question</h5>
+            <p>Validate the core assumption: do students actually commit to structured mentorship, or do they prefer more casual support?</p>
+          </div>
+        </div>
+      </div>
+    `,
+    link: 'https://genesismarie.framer.website/mentor-u'
+  },
+  wayfair: {
+    name: 'Wayfair Externship',
+    meta: [{l:'Timeline',v:'Oct – Dec 2025'},{l:'Role',v:'AI Agent Developer'},{l:'Scope',v:'Research Automation · Prompt Engineering'}],
+    hero: 'cover-wayfair.png',
+    desc: `
+      <div class="cs-section">
+        <span class="cs-label">Overview</span>
+        <h3 class="cs-heading">Manual Research Couldn't Keep Up</h3>
+        <p class="cs-body">During this externship, I worked on a multi-stage AI automation system designed to help Wayfair's Rugs department team identify trends, monitor competitors, and generate actionable marketing insights faster than traditional research methods.</p>
+        <p class="cs-body">Instead of building a single tool, the project evolved week by week into a connected ecosystem of AI agents — each responsible for a specific part of the market intelligence pipeline.</p>
+      </div>
+
+      <div class="cs-section">
+        <span class="cs-label">Solution</span>
+        <h3 class="cs-heading">Three AI Agents Working in Harmony</h3>
+        <p class="cs-body">I built three specialized AI agents using n8n and Google Gemini that continuously monitor the market and surface insights automatically. Instead of Wayfair's team spending hours researching, they now open a Google Sheet and see what's already been found.</p>
+        <ul class="cs-agent-list">
+          <li><h5>1. Market Trend Discovery</h5><p>Monitors Amazon, Google, and 4 RSS feeds to catch competitor launches, pricing shifts, and new marketing angles.</p></li>
+          <li><h5>2. Competitor Analysis</h5><p>Compares Amazon vs Wayfair product offerings to identify gaps and opportunities in real-time.</p></li>
+          <li><h5>3. Content Generation Ideas</h5><p>Analyzes how Walmart and Amazon frame their products to surface actionable content strategies.</p></li>
+        </ul>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">How It Works</span>
+        <h3 class="cs-heading">Competitor Analysis</h3>
+        <p class="cs-body">This agent analyzes what competitors are doing across multiple channels so Wayfair's team doesn't have to.</p>
+        <img src="images/wayfair-competitor-workflow.png" alt="Competitor analysis workflow" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body"><strong>What it monitors:</strong> Amazon product listings, Google search results, and 4 curated RSS feeds from home décor publications.</p>
+        <p class="cs-body"><strong>How it works:</strong> When prompted through a chat message, the workflow fetches fresh data from each source, cleans the HTML, extracts relevant content, and passes it to Google Gemini. Gemini identifies significant patterns — price drops, new launches, shifts in positioning — then explains why each change matters.</p>
+      </div>
+
+      <div class="cs-section">
+        <h3 class="cs-heading">Market Trend Discovery</h3>
+        <p class="cs-body">Instead of manually comparing what Amazon has that Wayfair doesn't, this agent does it automatically.</p>
+        <img src="images/wayfair-trend-workflow.png" alt="Market trend discovery workflow" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body"><strong>What it compares:</strong> Amazon and Wayfair product pages in the rugs category.</p>
+        <p class="cs-body"><strong>How it works:</strong> The workflow scrapes both platforms simultaneously, pulling structured data like size, color, material, pattern, style, price, and features. Gemini compares the two catalogs side by side, surfacing trends Amazon is capitalizing on that Wayfair is missing — backed by specific product examples.</p>
+      </div>
+
+      <div class="cs-section">
+        <h3 class="cs-heading">Content Generation & Marketing Ideas</h3>
+        <p class="cs-body">This agent studies how competitors talk about their products, then provides ideas Wayfair's team can adapt.</p>
+        <img src="images/wayfair-content-workflow.png" alt="Content generation workflow" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body"><strong>What it analyzes:</strong> Walmart and Amazon product descriptions, titles, and promotional copy.</p>
+        <p class="cs-body"><strong>How it works:</strong> The workflow scrapes product pages and extracts the language competitors use — features they emphasize, emotional angles they lean into, how they frame value. Gemini synthesizes these into actionable content ideas: blog topics, social captions, campaign angles, messaging frameworks — each with the competitive example that inspired it.</p>
+      </div>
+
+      <div class="cs-section">
+        <h3 class="cs-heading">Getting Everything Into Google Sheets</h3>
+        <p class="cs-body">All three workflows feed into a centralized Supabase database workflow that normalizes, validates, and routes data to the final Google Sheets dashboard.</p>
+        <img src="images/wayfair-supabase-workflow.png" alt="Supabase pipeline workflow" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body"><strong>How it works:</strong> Each AI agent sends its output to Supabase with standardized field names. A separate pipeline workflow reads from Supabase, sorts data by type (trends, competitors, insights), and updates the corresponding Google Sheets tabs in real-time.</p>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Technical Challenge</span>
+        <h3 class="cs-heading">When the System Kept Breaking</h3>
+        <p class="cs-body">When I added Supabase nodes to each existing workflow, the automation stopped working at that point in the pipeline. The workflows would still run in n8n, but no output was being written to Supabase — which meant nothing ever reached Google Sheets.</p>
+        <p class="cs-body">To understand where the breakdown was happening, I went through the workflow node by node and traced how data was being passed into and out of the Supabase nodes. During this review, I found that the code provided for the workflow referenced the same fields in multiple inconsistent ways. Because those field names didn't match what Supabase expected, the data was being dropped silently.</p>
+        <div class="cs-callout">
+          <div class="cs-callout-title">My fix:</div>
+          <div class="cs-callout-group">
+            <p>Agent ID was referenced inconsistently as</p>
+            <div class="cs-code-block">
+              <code>{{ $json.agentId }}</code>
+              <code>{{ $json.agentID }}</code>
+              <code>{{ $json.agent_id }}</code>
+            </div>
+          </div>
+          <div class="cs-callout-group">
+            <p>Inputs were passed using mixed formats such as</p>
+            <div class="cs-code-block">
+              <code>{{ $json.input }}</code>
+              <code>{{ $json.input_text }}</code>
+              <code>{{ $('Code').item.json.input }}</code>
+            </div>
+          </div>
+          <div class="cs-callout-group">
+            <p>Outputs were referenced inconsistently as</p>
+            <div class="cs-code-block">
+              <code>{{ $json.output }}</code>
+              <code>{{ $('Code').item.json.output }}</code>
+            </div>
+          </div>
+          <p class="cs-body" style="margin-top:14px;">Once the field references were aligned across all Supabase nodes and downstream connections, the workflows completed successfully. Data passed through Supabase as expected and populated the dashboard without further issues.</p>
+        </div>
+      </div>
+
+      <div class="cs-section">
+        <span class="cs-label">Prompt Engineering</span>
+        <h3 class="cs-heading">Making the AI Actually Useful</h3>
+        <p class="cs-body">Once the workflows were stable, the next challenge was improving the quality of the AI outputs. The agents relied on system messages to interpret scraped data and return structured insights. I found that small changes to these prompts had a significant impact on the final output.</p>
+
+        <p class="cs-sub-heading">What I tested</p>
+        <div class="cs-2col-cards">
+          <div class="cs-2col-card">Adjusted system messages to change the agent's <strong>role</strong> (analyst, strategist, copywriter)</div>
+          <div class="cs-2col-card">Experimented with <strong>tone shifts</strong> (analytical → conversational → brand-aligned)</div>
+          <div class="cs-2col-card">Refined <strong>intent and context</strong>, not just instructions</div>
+          <div class="cs-2col-card">Compared outputs across <strong>multiple prompt versions</strong> using the same input data</div>
+        </div>
+
+        <p class="cs-sub-heading">What changed</p>
+        <div class="cs-callout">
+          <ul class="cs-arrow-list">
+            <li>Output structure became more <strong>consistent and usable</strong></li>
+            <li>Tone shifted from generic summaries to <strong>Wayfair-aligned storytelling</strong></li>
+            <li>The same data produced <strong>different insights</strong> depending on prompt framing</li>
+            <li>Agents moved from listing trends → <strong>translating insights into ideas</strong></li>
+          </ul>
+        </div>
+
+        <p class="cs-sub-heading">Why it mattered</p>
+        <p class="cs-body">Small prompt changes reshaped how the agents interpreted data — affecting not just wording, but what information was emphasized or surfaced. This turned raw trend signals into outputs that could realistically support merchandising, marketing, or content teams.</p>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Final Output</span>
+        <h3 class="cs-heading">Prototype</h3>
+        <p class="cs-body">Through a chat-triggered workflow, the system analyzes competitors, identifies market and social trends, and generates structured insights in one place.</p>
+        <div class="cs-stats">
+          <div class="cs-stat"><span class="cs-stat-num">3</span><span class="cs-stat-label">AI Agents Built</span></div>
+          <div class="cs-stat"><span class="cs-stat-num">7</span><span class="cs-stat-label">Competitors Monitored</span></div>
+          <div class="cs-stat"><span class="cs-stat-num">8–10hrs</span><span class="cs-stat-label">Estimated Time Saved</span></div>
+          <div class="cs-stat"><span class="cs-stat-num">14</span><span class="cs-stat-label">Data Fields per Trend</span></div>
+        </div>
+      </div>
+
+      <div class="cs-section">
+        <span class="cs-label">Reflections</span>
+        <h3 class="cs-heading">What I Learned</h3>
+        <div class="cs-takeaway-cols">
+          <div class="cs-takeaway-col">
+            <h5>Prompt engineering changed how I think about AI.</h5>
+            <p>While building this project, I saw how small changes to prompts could completely shift the tone, structure, and usefulness of the output. It made me realize that AI doesn't just respond to data, it responds to how clearly you explain the goal. Writing prompts became less about telling the system what to do and more about guiding how it thinks.</p>
+          </div>
+          <div class="cs-takeaway-col">
+            <h5>This project also changed how I approach research.</h5>
+            <p>Seeing how large amounts of information could be organized and surfaced more quickly showed how workflows like this could support early-stage research and problem validation. It sparked ideas for a future project focused on early problem validation, where patterns in online conversations are analyzed to surface recurring user frustrations before design decisions are made.</p>
+          </div>
+        </div>
+      </div>
+    `,
+    link: 'https://genesismarie.framer.website/wayfair-externship'
+  },
+  rolesync: {
+    name: 'RoleSync',
+    subtitle: 'Built in 5 days to solve a problem I was living through. RoleSync pulls job data straight into Airtable, so you can focus on applying, not organizing.',
+    meta: [{l:'Timeline',v:'Feb 2026 (5 days)'},{l:'Role',v:'Designer & Developer'},{l:'Tools',v:'Claude Code · Airtable · GitHub'}],
+    hero: 'images/hero-rolesync.png',
+    desc: `
+      <div class="cs-section">
+        <span class="cs-label">Problem</span>
+        <h3 class="cs-heading">Job Searching is Stressful. Tracking It Shouldn't Be.</h3>
+        <p class="cs-body">At some point during my job search, I had 150 applications scattered across LinkedIn, Handshake, ZipRecruiter, and company sites, all being copy-pasted into a Google Sheet that was becoming impossible to manage. Every new application meant another 3 to 5 minutes of tab-switching, manual entry, and hoping I didn't mix anything up. I knew there had to be a better way.</p>
+        <div class="cs-stats">
+          <div class="cs-stat"><span class="cs-stat-num">150+</span><span class="cs-stat-label">Jobs manually entered into a spreadsheet</span></div>
+          <div class="cs-stat"><span class="cs-stat-num">3–5 min</span><span class="cs-stat-label">Per application just to copy & paste data</span></div>
+          <div class="cs-stat"><span class="cs-stat-num">4+</span><span class="cs-stat-label">Different job platforms with no unified system</span></div>
+        </div>
+        <div class="cs-before-after">
+          <div class="cs-ba-card cs-ba-before">
+            <div class="cs-ba-header">✕ Before</div>
+            <div class="cs-ba-body">
+              <p>150+ rows entered by hand, one by one. Job links buried in cells, inconsistent column names, and no quick way to filter what actually mattered.</p>
+              <img src="images/rolesync-google-sheet.png" alt="Messy Google Sheet" style="width:100%;height:100%;object-fit:cover;display:block;">
+            </div>
+          </div>
+          <div class="cs-ba-card cs-ba-after">
+            <div class="cs-ba-header">✓ After</div>
+            <div class="cs-ba-body">
+              <p>A clean Airtable dashboard where every application lives. Color-coded statuses, consistent fields, and everything populated automatically in seconds.</p>
+              <img src="images/rolesync-airtable.png" alt="Clean Airtable base" style="width:100%;height:100%;object-fit:cover;display:block;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">How It Works</span>
+        <h3 class="cs-heading">Save a Job in Seconds</h3>
+        <ol style="margin:16px 0 20px;padding-left:20px;display:flex;flex-direction:column;gap:8px;">
+          <li class="cs-body"><strong>Open any job posting.</strong> Navigate to a listing on LinkedIn, Handshake, ZipRecruiter, or any company career page.</li>
+          <li class="cs-body"><strong>Click the RoleSync extension.</strong> Fields auto-populate with the job title, company, salary, location, and source detected automatically.</li>
+          <li class="cs-body"><strong>Review and customize.</strong> Edit any field, tag your status, add a date, and leave notes before saving.</li>
+        </ol>
+        <video src="images/rolesync-walkthrough.mp4" controls playsinline style="width:100%;border-radius:12px;display:block;"></video>
+        <h3 class="cs-heading" style="margin-top:32px;">Synced to Airtable</h3>
+        <p class="cs-body" style="margin:10px 0 16px;">The moment you save, the entry lands in your Airtable base, ready to sort, filter, and track alongside everything else.</p>
+        <video src="images/rolesync-airtable-result.mp4" controls playsinline style="width:100%;border-radius:12px;display:block;"></video>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Outcome</span>
+        <h3 class="cs-heading">From Idea to Working Product</h3>
+        <div class="cs-outcome-cards">
+          <div class="cs-outcome-card"><span class="cs-outcome-num">5</span><p>Days from idea to working extension</p></div>
+          <div class="cs-outcome-card"><span class="cs-outcome-num">4+</span><p>Job platforms supported</p></div>
+          <div class="cs-outcome-card"><span class="cs-outcome-num">150+</span><p>Manual entries replaced</p></div>
+          <a href="https://github.com/gennyymarie/rolesync-extension" target="_blank" class="cs-outcome-card" style="text-decoration:none;cursor:pointer;"><span class="cs-outcome-num">v1.0</span><p>Published to GitHub ↗</p></a>
+        </div>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Takeaways</span>
+        <div class="cs-takeaway-cols" style="margin-top:20px;">
+          <div class="cs-takeaway-col" style="grid-column: 1/-1;">
+            <p>Building RoleSync taught me that the fastest path to understanding a user's problem is living it yourself. I didn't need interviews or surveys — 150+ rows of manual data entry was research enough. Shipping something functional in 5 days also pushed me to make real decisions quickly, without overthinking, and that's a skill I hadn't fully tested before.</p>
+          </div>
+        </div>
+      </div>
+    `,
+    link: '#'
+  },
+  future: {
+    name: 'Future Funds',
+    subtitle: 'Redesigning a Financial Services Landing Page to Improve Clarity and User Flow.',
+    meta: [{l:'Timeline',v:'May – Jun 2025'},{l:'Role',v:'UX Designer'},{l:'Scope',v:'Wireframing · Prototyping · Usability Strategy'}],
+    hero: 'cover-futurefunds.png',
+    desc: `
+      <div class="cs-section">
+        <span class="cs-label">Overview</span>
+        <h3 class="cs-heading">What is Future Funds?</h3>
+        <p class="cs-body">FutureFunds is a redesign project focused on evaluating and improving an existing financial landing page experience. The goal was not to replace the original structure, but to refine how information was prioritized, sequenced, and presented to better support first-time users navigating a financial platform.</p>
+        <p class="cs-body">Working from provided wireframes and research materials, I analyzed usability risks, identified opportunities to reduce cognitive load, and redesigned the landing page to create a clearer, more confident path from first impression to action.</p>
+      </div>
+
+      <div class="cs-section">
+        <span class="cs-label">Problem</span>
+        <h3 class="cs-heading">What Problems Did I Find?</h3>
+        <p class="cs-body">While the initial wireframes followed common financial landing page patterns, several layout and sequencing choices made it <strong>difficult to quickly understand the product and navigate the page.</strong></p>
+        <img src="images/ff-annotated-wireframes.png" alt="Annotated original wireframes" style="width:100%;border-radius:10px;display:block;">
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Research</span>
+        <h3 class="cs-heading">Key Usability Issues from Wireframe Testing</h3>
+        <p class="cs-body">I reviewed usability feedback from 3 participants who evaluated the original wireframes without prior knowledge of FutureFunds. Participants required guidance to complete tasks, indicating <strong>issues with content sequencing and labeling.</strong></p>
+        <div class="cs-research-cards">
+          <div class="cs-research-card">
+            <span class="cs-rc-label">Task Completion</span>
+            <blockquote class="cs-rc-quote">"I couldn't understand the purpose of the company, or their services"</blockquote>
+            <hr class="cs-rc-divider">
+            <p class="cs-rc-body">Low task completion rate — users couldn't complete tasks without prompting.</p>
+          </div>
+          <div class="cs-research-card">
+            <span class="cs-rc-label">Error Rate</span>
+            <blockquote class="cs-rc-quote">"Most buttons are missing labels... I didn't know what they were for"</blockquote>
+            <hr class="cs-rc-divider">
+            <p class="cs-rc-body">High error rate due to navigation confusion.</p>
+          </div>
+          <div class="cs-research-card">
+            <span class="cs-rc-label">Cognitive Load</span>
+            <blockquote class="cs-rc-quote">"I was very overwhelmed and didn't know where to start"</blockquote>
+            <hr class="cs-rc-divider">
+            <p class="cs-rc-body">High cognitive load impacting efficiency.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-section">
+        <h3 class="cs-heading">Industry Patterns That Stood Out</h3>
+        <p class="cs-body">I also looked at how established financial services handled similar challenges. Betterment, NerdWallet, and QuickBooks all <strong>shared common patterns: clear section labels, generous white space, and logical flow.</strong></p>
+        <img src="images/ff-logos-competitors.png" alt="Betterment, QuickBooks, and NerdWallet logos" style="width:100%;display:block;margin:20px 0;border-radius:10px;">
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Ideation</span>
+        <h3 class="cs-heading">Structuring the Experience for Clarity and Flow</h3>
+        <p class="cs-body">With the problems defined and patterns identified, I started designing mobile wireframes to figure out what really mattered. With limited space, there's nowhere to hide weak decisions — every element has to earn its place.</p>
+        <img src="images/ff-mobile-wireframes.png" alt="Mobile wireframes" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body" style="margin-top:16px;">The new sequence reflects how users typically evaluate financial services: understand first, build trust second, then commit. Once the mobile version worked, I adapted it for desktop — same flow, but with more horizontal space for service cards and visuals.</p>
+      </div>
+
+      <div class="cs-section">
+        <span class="cs-label">Design</span>
+        <h3 class="cs-heading">Visual Direction</h3>
+        <p class="cs-body">I worked with FutureFunds' existing logo and color palette but chose a new typeface (Inter) that felt clearer and more modern and aligned better with the target audience. Then I created a style guide to keep everything consistent across screens.</p>
+        <img src="images/ff-style-guide.png" alt="Style guide" style="width:100%;border-radius:10px;display:block;">
+      </div>
+
+      <div class="cs-section">
+        <div class="cs-side-by-side">
+          <div class="cs-side-text">
+            <h3 class="cs-heading">Making Future Funds Accessible</h3>
+            <p class="cs-body">When I started applying FutureFunds' brand colors, I discovered the original green failed WCAG contrast standards at 2.21:1. I added a darker green as the primary color with 9.39:1 contrast to meet WCAG AAA standards and kept the original light green as an accent.</p>
+            <p class="cs-body" style="margin-top:12px;">I also addressed structural accessibility by improving spacing and ensuring proper heading hierarchy for screen readers.</p>
+          </div>
+          <div class="cs-side-img">
+            <img src="images/ff-contrast-comparison.png" alt="Contrast comparison" style="width:100%;height:220px;object-fit:cover;border-radius:10px;display:block;">
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-section">
+        <h3 class="cs-heading">Planning for Usability Validation</h3>
+        <p class="cs-body">For this project, my role was to develop a usability test plan rather than execute the testing. The plan below outlines how I would validate the redesign in a real-world scenario.</p>
+        <img src="images/ff-usability-test-plan.png" alt="Usability test plan" style="width:100%;border-radius:10px;display:block;">
+        <p class="cs-body" style="margin-top:12px;">Had this project continued, I would run moderated tests with 5–7 users that match the target audience and measure completion rates, errors, and satisfaction.</p>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Prototype</span>
+        <h3 class="cs-heading">Design Mockups</h3>
+        <p class="cs-body">The final screens demonstrate how hierarchy, labeling, and flow were improved to reduce cognitive load and help users understand what FutureFunds offers and what to do next.</p>
+        <img src="images/ff-desktop-mockup.png" alt="Desktop mockup" style="width:100%;border-radius:10px;display:block;">
+        <div class="cs-mobile-carousel">
+          <div class="cs-mobile-scroll">
+            <div class="cs-mobile-screen">[ Screen 1 ]</div>
+            <div class="cs-mobile-screen">[ Screen 2 ]</div>
+            <div class="cs-mobile-screen">[ Screen 3 ]</div>
+            <div class="cs-mobile-screen">[ Screen 4 ]</div>
+            <div class="cs-mobile-screen">[ Screen 5 ]</div>
+            <div class="cs-mobile-screen">[ Screen 6 ]</div>
+            <div class="cs-mobile-screen">[ Screen 7 ]</div>
+            <div class="cs-mobile-screen">[ Screen 8 ]</div>
+          </div>
+        </div>
+        <p class="cs-body" style="margin-top:8px;font-size:0.72rem;color:var(--mid);">Scroll to see all mobile screens →</p>
+      </div>
+
+      <hr class="cs-divider">
+
+      <div class="cs-section">
+        <span class="cs-label">Takeaways</span>
+        <h3 class="cs-heading">Final Thoughts</h3>
+        <div class="cs-two-col-takeaway">
+          <div>
+            <span class="cs-label" style="margin-bottom:10px;display:block;">Outcomes</span>
+            <p class="cs-body">The redesign addressed all 4 usability issues identified in testing:</p>
+            <ul class="cs-check-list">
+              <li><span>Established a logical <strong>discovery flow</strong> by moving the hero section to the top for immediate clarity.</span></li>
+              <li>Organized sections in a logical order to guide users naturally toward booking an appointment.</li>
+              <li>Added clear labels and consistent buttons so users know exactly what to click.</li>
+              <li>Accessibility improved by updating the primary brand color from 2.21:1 to 9.39:1 contrast (WCAG AAA).</li>
+            </ul>
+          </div>
+          <div>
+            <span class="cs-label" style="margin-bottom:10px;display:block;">Reflection</span>
+            <p class="cs-body">This project showed that how information is sequenced is just as important as how it looks. By prioritizing the most important content first, I reduced confusion and made the path to action simpler.</p>
+            <p class="cs-body" style="margin-top:14px;">If continued, I would execute the usability testing and iterate based on real user behavior.</p>
+          </div>
+        </div>
+      </div>
+    `,
+    link: 'https://genesismarie.framer.website/future-funds'
+  }
+};
+
+let isExpanded = false;
+
+function openPopup(id) {
+  const p = data[id];
+  document.getElementById('pName').textContent = p.name;
+  document.getElementById('pCrumb').textContent = p.name;
+  // Subtitle
+  const existingSub = document.getElementById('pSubtitle');
+  if (existingSub) existingSub.remove();
+  if (p.subtitle) {
+    const sub = document.createElement('p');
+    sub.id = 'pSubtitle';
+    sub.style.cssText = 'font-size:0.88rem;color:var(--mid);line-height:1.6;margin-top:-16px;margin-bottom:8px;';
+    sub.textContent = p.subtitle;
+    document.getElementById('pName').after(sub);
+  }
+  const pv = document.getElementById('pVisual');
+  pv.style.background = '';
+  pv.innerHTML = '<img src="' + p.hero + '" alt="' + p.name + ' hero" style="width:100%;height:100%;object-fit:cover;display:block;">';
+  document.getElementById('pDesc').innerHTML = p.desc;
+  document.getElementById('pMeta').innerHTML = p.meta.map(m =>
+    `<div><div class="pm-label">${m.l}</div><div class="pm-val">${m.v}</div></div>`
+  ).join('');
+  isExpanded = false;
+  document.getElementById('overlay').classList.remove('expanded');
+  document.getElementById('expandLabel').textContent = 'Expand';
+  document.getElementById('expandIcon').textContent = '↗';
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  popupEl.scrollTop = 0;
+  setTimeout(revealCsSections, 40);
+}
+
+function toggleExpand(e) {
+  e.stopPropagation();
+  const overlay = document.getElementById('overlay');
+  isExpanded = !isExpanded;
+  overlay.classList.toggle('expanded', isExpanded);
+  document.getElementById('expandLabel').textContent = isExpanded ? 'Collapse' : 'Expand';
+  document.getElementById('expandIcon').textContent = isExpanded ? '↙' : '↗';
+}
+
+function closePopup() {
+  const overlay = document.getElementById('overlay');
+  overlay.classList.remove('open', 'expanded');
+  isExpanded = false;
+  document.body.style.overflow = '';
+}
+
+function outsideClose(e) {
+  if (e.target === document.getElementById('overlay')) closePopup();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+
+// Scroll-reveal for case study sections inside popup
+const popupEl = document.getElementById('popup');
+const csObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('cs-visible');
+      csObserver.unobserve(entry.target);
+    }
+  });
+}, { root: popupEl, threshold: 0.06 });
+
+function revealCsSections() {
+  const sections = Array.from(popupEl.querySelectorAll('.cs-section'));
+  sections.forEach(el => {
+    el.classList.remove('cs-visible');
+    csObserver.observe(el);
+  });
+  // First section always visible immediately
+  if (sections[0]) sections[0].classList.add('cs-visible');
+}
+
+// Mobile carousel drag scroll (Future Funds)
+document.addEventListener('mousedown', e => {
+  const scroll = e.target.closest('.cs-mobile-scroll');
+  if (!scroll) return;
+  scroll.classList.add('dragging');
+  const startX = e.clientX, startLeft = scroll.scrollLeft;
+  const move = e2 => scroll.scrollLeft = startLeft - (e2.clientX - startX);
+  const up = () => { scroll.classList.remove('dragging'); document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); };
+  document.addEventListener('mousemove', move);
+  document.addEventListener('mouseup', up);
+  e.preventDefault();
+});
+
+
+
+
+// User flow tabs
+function ufSwitch(n, btn) {
+  [0,1,2].forEach(function(i) {
+    document.getElementById('uf-panel-'+i).style.display = i===n ? 'block' : 'none';
+    var b = document.querySelectorAll('.uft-btn')[i];
+    b.style.borderBottomColor = i===n ? 'var(--ink)' : 'transparent';
+    b.style.color = i===n ? 'var(--ink)' : 'var(--mid)';
+    b.style.fontWeight = i===n ? '500' : '300';
+  });
+}
+
+(function(){
+  var b=document.getElementById('navBurger'),n=document.getElementById('navLinks');
+  if(!b||!n)return;
+  b.addEventListener('click',function(){b.classList.toggle('open');n.classList.toggle('open');});
+  n.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){b.classList.remove('open');n.classList.remove('open');});});
+})();
+
+// Homepage scroll reveal
+const homeObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); homeObs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal-section').forEach(el => homeObs.observe(el));
+
+// Build contact email to avoid Cloudflare obfuscation
+(function(){
+  var el = document.getElementById('contactEmail');
+  if (!el) return;
+  var e = 'genesismarie.design' + '@' + 'gmail.com';
+  el.href = 'mailto:' + e;
+  el.textContent = e;
+})();
+</script>
+</body>
+</html>

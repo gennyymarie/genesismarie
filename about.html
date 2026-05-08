@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Genesis Gonzalez</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+nav {
+  position: relative;
+  padding: 18px 52px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-name {
+  font-size: 0.88rem; font-weight: 300;
+  text-decoration: none; color: var(--ink);
+}
+.nav-name:hover, .nav-name:focus, .nav-name:active { text-decoration: none; outline: none; }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { font-size: 0.88rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: opacity 0.18s; }
+.nav-links a:hover { opacity: 0.5; }
+.nav-links a.active { text-decoration: underline; text-underline-offset: 4px; }
+.nav-links a.dim { color: var(--mid); }
+
+/* Playground gradient */
+.nav-links a.pg span {
+  background: linear-gradient(90deg,#f472b6,#a855f7,#818cf8,#f472b6);
+  background-size: 250% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: pgshift 3.5s linear infinite;
+}
+.nav-links a.pg:hover { opacity: 1; }
+@keyframes pgshift { 0%{background-position:0% center} 100%{background-position:250% center} }
+
+/* Hamburger */
+.nav-burger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; outline: none;
+  padding: 6px; cursor: none; margin-left: auto;
+}
+.nav-burger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); border-radius: 2px;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.2s;
+}
+.nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; }
+.nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 720px) {
+  nav { padding: 16px 24px; flex-wrap: wrap; }
+  .nav-burger { display: flex; }
+  .nav-links {
+    display: block; width: 100%; max-height: 0;
+    overflow: hidden; opacity: 0;
+    transition: max-height 0.44s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+  }
+  .nav-links.open { max-height: 300px; opacity: 1; }
+  .nav-links li a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; }
+  .nav-links li:last-child a { border-bottom: none; }
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --white: #fff;
+  --off: #f5f5f3;
+  --ink: #111;
+  --mid: #888;
+  --border: #e6e6e4;
+}
+body { background: var(--white); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; cursor: none; }
+.cursor { width:7px; height:7px; background:var(--ink); border-radius:50%; position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); mix-blend-mode:difference; }
+
+
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+nav           { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
+.about-hi     { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.12s both; }
+.about-photos { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.22s both; }
+.about-text   { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.32s both; }
+footer        { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) 0.4s both; }
+
+.about-hi { text-align:center; padding:72px 52px 56px; }
+.about-hi h1 { font-family:'Instrument Serif',serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:400; line-height:1.2; color:var(--ink); }
+
+.about-photos { max-width:1060px; margin:0 auto 8px; padding:0 52px; display:flex; justify-content:center; align-items:flex-start; gap:10px; }
+.board-photo { flex-shrink:0; width:88px; border-radius:6px; overflow:hidden; background:var(--off); border:1px solid var(--border); box-shadow:0 4px 16px rgba(0,0,0,0.08); display:flex; align-items:center; justify-content:center; font-size:0.55rem; text-transform:uppercase; letter-spacing:0.08em; color:rgba(0,0,0,0.3); }
+.board-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+.board-photo:nth-child(1) { height:118px; transform:rotate(-3deg);   margin-top:20px; }
+.board-photo:nth-child(2) { height:110px; transform:rotate(2deg);    margin-top:8px; }
+.board-photo:nth-child(3) { height:120px; transform:rotate(-1.5deg); margin-top:28px; }
+.board-photo:nth-child(4) { height:106px; transform:rotate(2.5deg);  margin-top:12px; }
+.board-photo:nth-child(5) { height:116px; transform:rotate(-2deg);   margin-top:22px; }
+
+.about-text { max-width:1060px; margin:0 auto; padding:32px 52px 92px; text-align:center; }
+.about-body { font-size:0.88rem; line-height:1.92; color:var(--mid); }
+.about-body p + p { margin-top:24px; }
+.about-section-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink); margin-bottom:4px; display:block; text-align:center; }
+
+.email-section { margin-top:48px; text-align:center; }
+.email-label { font-size:0.6rem; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink); display:block; margin-bottom:10px; }
+.copy-email {
+  display:inline-flex; align-items:center;
+  font-size:0.84rem; color:var(--ink);
+  background:var(--off); border:none;
+  padding:10px 16px; border-radius:8px;
+  cursor:none; transition:background 0.18s;
+  font-family:'DM Sans',sans-serif; font-weight:300;
+}
+.copy-email:hover { background:#ebebea; }
+.copy-confirm { font-size:0.7rem; color:var(--mid); opacity:0; transition:opacity 0.3s; pointer-events:none; display:block; margin-top:8px; }
+
+footer { max-width:1060px; margin:0 auto; padding:16px 52px; border-top:1px solid var(--border); display:flex; justify-content:space-between; }
+footer p { font-size:0.65rem; color:var(--mid); }
+
+@media (max-width:720px) {
+  
+  .about-hi { padding:48px 24px 40px; }
+  .about-photos { padding:0 16px; gap:6px; }
+  .board-photo { width:calc(20vw - 10px); }
+  .board-photo:nth-child(1) { height:calc(27vw - 13px); }
+  .board-photo:nth-child(2) { height:calc(25vw - 13px); }
+  .board-photo:nth-child(3) { height:calc(27vw - 13px); }
+  .board-photo:nth-child(4) { height:calc(24vw - 13px); }
+  .board-photo:nth-child(5) { height:calc(26vw - 13px); }
+  .about-text, footer { padding-left:24px; padding-right:24px; }
+}
+.reveal {
+  opacity: 0; transform: translateY(14px);
+  transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+ 100%{background-position:250% center} }
+
+
+@media (max-width: 720px) {
+  
+  
+  
+  .nav-links.open { max-height: 300px; opacity: 1; }
+  .nav-links li a {
+    display: block;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.94rem;
+  }
+  .nav-links li:last-child a { border-bottom: none; }
+}
+
+
+@media (max-width: 720px) {
+  
+  
+  
+  .nav-links.open { max-height: 300px; opacity: 1; }
+  .nav-links li a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.94rem; font-weight: 400; }
+  .nav-links li:last-child a { border-bottom: none; }
+}
+
+ 100%{background-position:250% center} }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+
+<nav>
+  <a href="index.html" class="nav-name">Genesis Gonzalez</a>
+  <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">Work</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="playground.html" class="pg"><span>Playground</span></a></li>
+    <li><a href="https://docs.google.com/document/d/1oeEOG62CRp6in0x2XRff7gzfNeYK_z6iW47piGqvPAo/edit?usp=sharing" target="_blank" class="dim">Resume</a></li>
+  </ul>
+</nav>
+
+<div class="about-hi">
+  <h1>Hi, I'm Genesis!</h1>
+</div>
+
+<div class="about-photos reveal">
+  <div class="board-photo" style="width:clamp(56px,8vw,88px);height:clamp(74px,11vw,118px);left:calc(50% - 5 * clamp(56px,8vw,88px)/2 - 4*6px + 0*(clamp(56px,8vw,88px)+6px));top:20px;transform:rotate(-3deg);"></div>
+  <div class="board-photo" style="width:clamp(56px,8vw,88px);height:clamp(68px,10vw,110px);left:calc(50% - 5 * clamp(56px,8vw,88px)/2 - 4*6px + 1*(clamp(56px,8vw,88px)+6px));top:8px;transform:rotate(2deg);"></div>
+  <div class="board-photo" style="width:clamp(56px,8vw,88px);height:clamp(74px,11vw,120px);left:calc(50% - 5 * clamp(56px,8vw,88px)/2 - 4*6px + 2*(clamp(56px,8vw,88px)+6px));top:28px;transform:rotate(-1.5deg);"></div>
+  <div class="board-photo" style="width:clamp(56px,8vw,88px);height:clamp(66px,10vw,106px);left:calc(50% - 5 * clamp(56px,8vw,88px)/2 - 4*6px + 3*(clamp(56px,8vw,88px)+6px));top:12px;transform:rotate(2.5deg);"></div>
+  <div class="board-photo" style="width:clamp(56px,8vw,88px);height:clamp(72px,11vw,116px);left:calc(50% - 5 * clamp(56px,8vw,88px)/2 - 4*6px + 4*(clamp(56px,8vw,88px)+6px));top:22px;transform:rotate(-2deg);"></div>
+</div>
+
+<div class="about-text reveal">
+  <div class="about-body">
+    <p class="about-section-label">Background</p>
+    <p>Originally from Upstate New York, I studied Graphic Design with a UX concentration at Southern New Hampshire University, graduating with a 3.9 GPA. Before design, I worked in customer service, which taught me how to genuinely listen and advocate for people. That instinct still drives every project I take on.</p>
+    <p class="about-section-label" style="margin-top:24px;">Currently</p>
+    <p>I'm currently an AI Training Fellow through Handshake and recently completed Wayfair's AI Automation Externship, where I built n8n + Gemini workflows that fed real market intelligence to vendor teams. I'm relocating to Chicago in Fall 2026 to pursue my M.S. in HCI at DePaul University.</p>
+    <p class="about-section-label" style="margin-top:24px;">Outside of work</p>
+    <p>When I'm not designing, I'm reading, behind a camera, or hanging out with my dog Amelia. My family is everything and they're why I push myself.</p>
+  </div>
+  <div class="email-section">
+    <span class="email-label">Email me</span>
+    <button class="copy-email" id="copyBtn">genesismarie.design<!-- -->@<!-- -->gmail.com</button>
+    <span class="copy-confirm" id="copyConfirm">Copied!</span>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Genesis Gonzalez</p>
+  <p>Designed &amp; coded with ♥ using Claude</p>
+</footer>
+
+<script>
+const cur = document.getElementById('cur');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top = e.clientY + 'px';
+});
+
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+const email = 'genesismarie.design' + '@' + 'gmail.com';
+document.getElementById('copyBtn').textContent = email;
+document.getElementById('copyBtn').addEventListener('click', () => {
+  navigator.clipboard.writeText(email);
+  const confirm = document.getElementById('copyConfirm');
+  confirm.style.opacity = 1;
+  setTimeout(() => confirm.style.opacity = 0, 1800);
+});
+
+
+
+
+
+// Mobile nav
+(function(){
+  var b=document.getElementById('navBurger'),n=document.getElementById('navLinks');
+  if(!b||!n)return;
+  b.addEventListener('click',function(){b.classList.toggle('open');n.classList.toggle('open');});
+  n.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){b.classList.remove('open');n.classList.remove('open');});});
+})();
+</script>
+</body>
+</html>

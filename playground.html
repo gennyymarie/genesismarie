@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fun — Genesis Gonzalez</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --white: #fff;
+  --off: #f5f5f3;
+  --ink: #111;
+  --mid: #767676;
+  --border: #e6e6e4;
+}
+
+html, body {
+  width: 100%; height: 100%;
+  background: #fff;
+  font-family: 'DM Sans', sans-serif;
+  cursor: none;
+}
+
+/* CURSOR */
+.cursor {
+  width: 8px; height: 8px;
+  background: #111;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  mix-blend-mode: difference;
+}
+
+/* NAV */
+nav {
+  position: relative;
+  padding: 18px 52px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-name {
+  font-size: 0.88rem; font-weight: 300;
+  text-decoration: none; color: var(--ink);
+}
+.nav-name:hover, .nav-name:focus, .nav-name:active { text-decoration: none; outline: none; }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a { font-size: 0.88rem; font-weight: 300; color: var(--ink); text-decoration: none; transition: opacity 0.18s; }
+.nav-links a:hover { opacity: 0.5; }
+.nav-links a.active { text-decoration: underline; text-underline-offset: 4px; }
+.nav-links a.dim { color: var(--mid); }
+
+.nav-links a.pg span {
+  background: linear-gradient(90deg,#f472b6,#a855f7,#818cf8,#f472b6);
+  background-size: 250% auto;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  animation: pgshift 3.5s linear infinite;
+}
+.nav-links a.pg:hover { opacity: 1; }
+@keyframes pgshift { 0%{background-position:0% center} 100%{background-position:250% center} }
+
+/* Hamburger */
+.nav-burger {
+  display: none; flex-direction: column; gap: 5px;
+  background: none; border: none; outline: none;
+  padding: 6px; cursor: none; margin-left: auto;
+}
+.nav-burger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--ink); border-radius: 2px;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), opacity 0.2s;
+}
+.nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-burger.open span:nth-child(2) { opacity: 0; }
+.nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 720px) {
+  nav { padding: 16px 24px; flex-wrap: wrap; }
+  .nav-burger { display: flex; }
+  .nav-links {
+    display: block; width: 100%; max-height: 0;
+    overflow: hidden; opacity: 0;
+    transition: max-height 0.44s cubic-bezier(0.16,1,0.3,1), opacity 0.3s ease;
+  }
+  .nav-links.open { max-height: 300px; opacity: 1; }
+  .nav-links li a { display: block; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 0.88rem; font-weight: 400; }
+  .nav-links li:last-child a { border-bottom: none; }
+}
+
+/* CANVAS WRAP */
+.canvas-wrap {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #fff;
+}
+.canvas-wrap::-webkit-scrollbar { display: none; }
+.canvas { position: relative; width: 100%; min-height: 100vh; }
+
+/* CARDS */
+.card {
+  position: absolute; left: 0; top: 0;
+  border-radius: 14px; overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1), 0 1px 4px rgba(0,0,0,0.06);
+  cursor: none;
+  opacity: 0;
+  transition: transform 0.55s cubic-bezier(0.16,1,0.3,1),
+              width 0.55s cubic-bezier(0.16,1,0.3,1),
+              height 0.55s cubic-bezier(0.16,1,0.3,1),
+              box-shadow 0.2s ease,
+              opacity 0.4s ease;
+  will-change: transform, opacity;
+}
+.card-face { width: 100%; height: 100%; display: block; }
+
+/* POPUP */
+.overlay {
+  position: fixed; inset: 0; z-index: 600;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(14px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+.popup {
+  background: var(--white); border-radius: 20px;
+  width: 100%; max-width: 580px; max-height: 90vh;
+  overflow: hidden; display: flex; flex-direction: column;
+  transform: translateY(18px) scale(0.97); opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.16,1,0.3,1), opacity 0.25s ease;
+  box-shadow: 0 28px 80px rgba(0,0,0,0.2);
+}
+.overlay.open .popup { transform: none; opacity: 1; }
+
+.popup-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 22px 14px;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.popup-bar-cat {
+  font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--mid); display: block; margin-bottom: 3px;
+}
+.popup-bar-name { font-size: 1rem; font-weight: 600; color: var(--ink); }
+.popup-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--off); border: none; cursor: none;
+  font-size: 0.82rem; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s; flex-shrink: 0;
+}
+.popup-close:hover { background: var(--border); }
+
+/* Carousel */
+.popup-carousel-wrap { position: relative; flex-shrink: 0; }
+.popup-carousel {
+  display: flex; overflow-x: auto;
+  scroll-snap-type: x mandatory; scrollbar-width: none;
+}
+.popup-carousel::-webkit-scrollbar { display: none; }
+.carousel-slide { flex-shrink: 0; width: 100%; height: 300px; scroll-snap-align: start; }
+.carousel-slide-inner { width: 100%; height: 100%; display: block; }
+.c-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(255,255,255,0.92); border: none; cursor: none;
+  font-size: 0.85rem; display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, opacity 0.15s; z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.c-arrow:hover { background: #fff; }
+.c-arrow:disabled { opacity: 0; pointer-events: none; }
+#cPrev { left: 12px; } #cNext { right: 12px; }
+
+/* Dots */
+.popup-dots { display: flex; gap: 6px; justify-content: center; padding: 10px 0 8px; flex-shrink: 0; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); transition: background 0.2s, transform 0.2s; cursor: none; }
+.dot.active { background: var(--ink); transform: scale(1.35); }
+
+/* Desc */
+.popup-desc-area { padding: 16px 24px 28px; overflow-y: auto; flex: 1; scrollbar-width: none; }
+.popup-desc-area::-webkit-scrollbar { display: none; }
+.popup-desc-area p { font-size: 0.86rem; color: var(--mid); line-height: 1.82; }
+
+/* Page load */
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+nav { animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.05s both; }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+
+<div class="canvas-wrap" id="canvasWrap">
+  <nav>
+    <a href="index.html" class="nav-name">Genesis Gonzalez</a>
+    <button class="nav-burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#work">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="playground.html" class="active pg"><span>Playground</span></a></li>
+      <li><a href="https://docs.google.com/document/d/1oeEOG62CRp6in0x2XRff7gzfNeYK_z6iW47piGqvPAo/edit?usp=sharing" target="_blank" class="dim">Resume</a></li>
+    </ul>
+  </nav>
+  <div class="canvas" id="canvas"></div>
+</div>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this)closePopup()">
+  <div class="popup">
+    <div class="popup-bar">
+      <div>
+        <span class="popup-bar-cat" id="pCat"></span>
+        <div class="popup-bar-name" id="pName"></div>
+      </div>
+      <button class="popup-close" onclick="closePopup()">✕</button>
+    </div>
+    <div class="popup-carousel-wrap">
+      <div class="popup-carousel" id="pCarousel"></div>
+      <button class="c-arrow" id="cPrev" onclick="carouselStep(-1)">←</button>
+      <button class="c-arrow" id="cNext" onclick="carouselStep(1)">→</button>
+    </div>
+    <div class="popup-dots" id="pDots"></div>
+    <div class="popup-desc-area"><p id="pDesc"></p></div>
+  </div>
+</div>
+
+<script>
+const cur = document.getElementById('cur');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top  = e.clientY + 'px';
+});
+
+const PROJECTS = [
+  { id:'fiera',    name:'FIERA',        cat:'Brand Identity', g:'linear-gradient(145deg,#f97b3d,#ffd06b)',  w:195, h:240, imgs:4, desc:'A bold, tropical curly hair brand built around confidence and celebration. Designed for women who wear their texture with pride.' },
+  { id:'moody',    name:'Moody Mix',    cat:'Brand Identity', g:'linear-gradient(145deg,#1a1a2e,#4a3f6b)', w:175, h:175, imgs:3, desc:'Sarcastic cat food brand starring a grumpy cat mascot. Irreverent copy meets maximalist packaging for the pet owner who gets it.' },
+  { id:'boba',     name:'Boba',         cat:'Brand Identity', g:'linear-gradient(145deg,#a78bdc,#f0c4e8)', w:185, h:230, imgs:4, desc:'A playful boba tea brand concept with a character-driven identity and bold, colorful packaging system.' },
+  { id:'record',   name:'Record Label', cat:'Brand Identity', g:'linear-gradient(145deg,#2c2c2c,#777)',    w:165, h:165, imgs:3, desc:'An independent record label identity built around texture, contrast, and a lo-fi aesthetic that feels lived-in.' },
+  { id:'dogbox',   name:'Dog Box',      cat:'Brand Identity', g:'linear-gradient(145deg,#ffe0b2,#ff8a65)', w:155, h:195, imgs:3, desc:'A monthly dog subscription box brand with a warm, illustrated personality — designed for devoted dog parents.' },
+  { id:'matcha',   name:'Matcha',       cat:'Packaging',      g:'linear-gradient(145deg,#c8e6c0,#5a9e5a)', w:215, h:165, imgs:4, desc:'A matcha and tea packaging concept exploring minimal structure with organic, earthy color palettes and hand-drawn details.' },
+  { id:'lipgloss', name:'Lip Gloss',    cat:'Packaging',      g:'linear-gradient(145deg,#f7c5d5,#e87da0)', w:170, h:215, imgs:4, desc:'A lip gloss packaging series with a retro-girly energy — bold typography, pink gradients, and maximalist label layouts.' },
+  { id:'hotsauce', name:'Hot Sauce',    cat:'Packaging',      g:'linear-gradient(145deg,#c0392b,#f39c12)', w:185, h:185, imgs:4, desc:'A hot sauce label series with fiery illustration and hand-lettered type. Each flavor has its own character and heat level.' },
+  { id:'sodas',    name:'Sodas',        cat:'Packaging',      g:'linear-gradient(145deg,#43c6ac,#191654)', w:225, h:165, imgs:4, desc:'A bold artisan soda packaging system with a flavor-forward design language — each can tells its own story.' },
+  { id:'skincare', name:'Skincare',     cat:'Packaging',      g:'linear-gradient(145deg,#e8d5c4,#c4a882)', w:165, h:205, imgs:3, desc:'A minimalist skincare packaging line with warm, sandy tones and clean type — soft luxury at an accessible price point.' },
+  { id:'sardines', name:'Sardines',     cat:'Packaging',      g:'linear-gradient(145deg,#1e5799,#7db9e8)', w:200, h:160, imgs:3, desc:'An elevated sardine tin rebrand — vintage nautical meets modern European grocery. Beautifully weird on purpose.' },
+  { id:'vitamins', name:'Vitamins',     cat:'Packaging',      g:'linear-gradient(145deg,#f8e71c,#f5a623)', w:170, h:170, imgs:3, desc:'A vitamin supplement packaging series with punchy color-coding and illustrated icons — health that actually looks good.' },
+  { id:'matches',  name:'Matches',      cat:'Packaging',      g:'linear-gradient(145deg,#37474f,#b0bec5)', w:155, h:195, imgs:3, desc:'A matchbook and match box series inspired by mid-century souvenir design — collectible, illustrated, and tiny.' },
+  { id:'books',    name:'Book Covers',  cat:'Editorial',      g:'linear-gradient(145deg,#3d0c02,#c0392b)', w:200, h:165, imgs:4, desc:'A series of book cover redesigns exploring bold type, unexpected color, and cover composition as its own art form.' },
+];
+
+let currentProject = null;
+let currentSlide   = 0;
+
+const canvas     = document.getElementById('canvas');
+const canvasWrap = document.getElementById('canvasWrap');
+
+// Build cards
+PROJECTS.forEach((p, i) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = `card-${p.id}`;
+  card.style.cssText = `width:${p.w}px;height:${p.h}px;opacity:0;z-index:${i+1}`;
+  card.innerHTML = `<div class="card-face" style="background:${p.g}"></div>`;
+  card.addEventListener('click', () => openPopup(p.id));
+  canvas.appendChild(card);
+});
+
+// Masonry layout
+function organize(animate) {
+  const vw     = canvasWrap.clientWidth;
+  const pad    = Math.max(24, vw * 0.04);
+  const gutter = 12;
+  const navH   = document.querySelector('nav').offsetHeight + 16;
+  const cols   = vw > 1100 ? 4 : vw > 750 ? 3 : 2;
+  const colW   = Math.floor((vw - pad * 2 - gutter * (cols - 1)) / cols);
+  const colH   = new Array(cols).fill(navH);
+  let maxH = 0;
+
+  PROJECTS.forEach((p, i) => {
+    const card    = document.getElementById(`card-${p.id}`);
+    const scaledH = Math.round(p.h * (colW / p.w));
+    const col     = colH.indexOf(Math.min(...colH));
+    const x = pad + col * (colW + gutter);
+    const y = colH[col];
+
+    card.style.width  = colW + 'px';
+    card.style.height = scaledH + 'px';
+
+    if (animate) {
+      card.style.transition = 'none';
+      card.style.transform  = `translate(${x}px,${y + 20}px)`;
+      card.style.opacity    = '0';
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          card.style.transition = '';
+          card.style.transform  = `translate(${x}px,${y}px)`;
+          card.style.opacity    = '1';
+        }, 60 + i * 45);
+      });
+    } else {
+      card.style.transform = `translate(${x}px,${y}px)`;
+      card.style.opacity   = '1';
+    }
+
+    colH[col] += scaledH + gutter;
+    maxH = Math.max(maxH, colH[col]);
+  });
+
+  canvas.style.height = maxH + 60 + 'px';
+}
+
+// Init
+organize(true);
+window.addEventListener('resize', () => organize(false));
+
+// ── POPUP ──
+function openPopup(id) {
+  const p = PROJECTS.find(x => x.id === id);
+  if (!p) return;
+  currentProject = p;
+  currentSlide   = 0;
+
+  document.getElementById('pCat').textContent  = p.cat;
+  document.getElementById('pName').textContent = p.name;
+  document.getElementById('pDesc').textContent = p.desc;
+
+  const carousel = document.getElementById('pCarousel');
+  carousel.innerHTML = '';
+  const brightnesses = [1, 0.88, 0.76, 0.65];
+  for (let i = 0; i < p.imgs; i++) {
+    const slide = document.createElement('div');
+    slide.className = 'carousel-slide';
+    slide.innerHTML = `<div class="carousel-slide-inner" style="background:${p.g};filter:brightness(${brightnesses[i] ?? 0.6})"></div>`;
+    carousel.appendChild(slide);
+  }
+  carousel.scrollTo({ left: 0, behavior: 'instant' });
+
+  const dots = document.getElementById('pDots');
+  dots.innerHTML = '';
+  for (let i = 0; i < p.imgs; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    const idx = i;
+    d.onclick = () => { currentSlide = idx; carousel.scrollTo({ left: idx * carousel.offsetWidth, behavior: 'smooth' }); syncUI(); };
+    dots.appendChild(d);
+  }
+
+  syncUI();
+  document.getElementById('overlay').classList.add('open');
+}
+
+function closePopup() {
+  document.getElementById('overlay').classList.remove('open');
+}
+
+function carouselStep(dir) {
+  if (!currentProject) return;
+  const next = currentSlide + dir;
+  if (next < 0 || next >= currentProject.imgs) return;
+  currentSlide = next;
+  const c = document.getElementById('pCarousel');
+  c.scrollTo({ left: next * c.offsetWidth, behavior: 'smooth' });
+  syncUI();
+}
+
+function syncUI() {
+  if (!currentProject) return;
+  document.querySelectorAll('#pDots .dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+  document.getElementById('cPrev').disabled = currentSlide === 0;
+  document.getElementById('cNext').disabled = currentSlide === currentProject.imgs - 1;
+}
+
+document.getElementById('pCarousel').addEventListener('scroll', function() {
+  if (!currentProject) return;
+  const idx = Math.round(this.scrollLeft / (this.offsetWidth || 1));
+  if (idx !== currentSlide && idx >= 0 && idx < currentProject.imgs) { currentSlide = idx; syncUI(); }
+});
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('overlay').classList.contains('open')) return;
+  if (e.key === 'Escape')     closePopup();
+  if (e.key === 'ArrowLeft')  carouselStep(-1);
+  if (e.key === 'ArrowRight') carouselStep(1);
+});
+
+let touchX = 0;
+document.getElementById('pCarousel').addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+document.getElementById('pCarousel').addEventListener('touchend',   e => {
+  if (Math.abs(e.changedTouches[0].clientX - touchX) > 50)
+    carouselStep(e.changedTouches[0].clientX < touchX ? 1 : -1);
+});
+
+// Mobile nav
+(function(){
+  var b=document.getElementById('navBurger'),n=document.getElementById('navLinks');
+  if(!b||!n)return;
+  b.addEventListener('click',function(){b.classList.toggle('open');n.classList.toggle('open');});
+  n.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){b.classList.remove('open');n.classList.remove('open');});});
+})();
+</script>
+</body>
+</html>
